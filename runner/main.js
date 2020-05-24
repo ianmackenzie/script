@@ -16,14 +16,6 @@ function createTemporaryDirectory() {
   return directoryPath;
 }
 
-function extendedErrorMessage(request, error) {
-  const stackTrace = new Error().stack;
-  // Chop off first two lines which are "Error:" and this method.
-  // Also, anything from XMLHttpRequest.send and above is not useful
-  const revisedTrace = stackTrace.replace(/\s+at XMLHttpRequest.send[\s\S]*/m, "").split("\n").slice(2).join("\n");
-  return "ERROR: " + error.message + "\r\n" + revisedTrace + "\r\n  Failed request: " + JSON.stringify(request) + "\r\n" ;
-}
-
 function exit(code) {
   // First, clean up any temp directories created while running the script
   for (const directoryPath of tempDirectoriesToRemove) {
@@ -74,7 +66,7 @@ function listEntities(request, handleResponse, statsPredicate) {
       });
     handleResponse(results);
   } catch (error) {
-    handleResponse({ message: extendedErrorMessage(request, error) });
+    handleResponse({ message: error.message });
   }
 }
 
@@ -222,7 +214,7 @@ class XMLHttpRequest {
           const contents = new TextDecoder("utf-8").decode(data);
           handleResponse(contents);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "writeFile":
@@ -232,7 +224,7 @@ class XMLHttpRequest {
           Deno.writeFileSync(filePath, contents);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "listFiles":
@@ -274,7 +266,6 @@ class XMLHttpRequest {
             handleResponse({ error: "notfound" });
           } else {
             console.log(error);
-            console.trace();
             exit(1);
           }
         }
@@ -286,7 +277,7 @@ class XMLHttpRequest {
           Deno.copyFileSync(sourcePath, destinationPath);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "moveFile":
@@ -296,7 +287,7 @@ class XMLHttpRequest {
           Deno.renameSync(sourcePath, destinationPath);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "deleteFile":
@@ -305,7 +296,7 @@ class XMLHttpRequest {
           Deno.removeSync(filePath);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "stat":
@@ -323,7 +314,7 @@ class XMLHttpRequest {
           if (error === Deno.errors.NotFound) {
             handleResponse("nonexistent");
           } else {
-            handleResponse({ message: extendedErrorMessage(request, error) });
+            handleResponse({ message: error.message });
           }
         }
         break;
@@ -333,7 +324,7 @@ class XMLHttpRequest {
           Deno.mkdirSync(directoryPath, { recursive: request.value.recursive });
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "removeDirectory":
@@ -344,7 +335,7 @@ class XMLHttpRequest {
           });
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "createTemporaryDirectory":
@@ -352,7 +343,7 @@ class XMLHttpRequest {
           const directoryPath = createTemporaryDirectory();
           handleResponse(directoryPath);
         } catch (error) {
-          handleResponse({ message: extendedErrorMessage(request, error) });
+          handleResponse({ message: error.message });
         }
         break;
       case "http":
