@@ -16,7 +16,14 @@ printEnvironmentVariable environment name =
 
 script : Script.Init -> Script String ()
 script { arguments, environment } =
-    arguments |> Script.each (printEnvironmentVariable environment)
+    case arguments of
+        [] ->
+            Script.fail (
+                "Requires at least one command-line argument specifying" ++
+                " environment variable names for which to get values."
+            )
+        _ ->
+            arguments |> Script.each (printEnvironmentVariable environment)
 
 
 main : Script.Program

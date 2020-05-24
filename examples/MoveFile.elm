@@ -9,10 +9,10 @@ script : Script.Init -> Script String ()
 script { workingDirectory } =
     let
         sourceFile =
-            File.in_ workingDirectory "reversed.txt"
+            File.in_ workingDirectory "test-copied.txt"
 
         destinationFile =
-            File.in_ workingDirectory "reversed-moved.txt"
+            File.in_ workingDirectory "test-moved.txt"
     in
     File.move sourceFile destinationFile
 

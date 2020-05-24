@@ -7,12 +7,13 @@ import Script.File as File
 
 niceScript : Directory permissions -> Script String ()
 niceScript directory =
-    File.read (File.in_ directory "test.txt")
+    File.read (File.in_ directory "subdirectory/../test.txt")
         |> Script.thenWith
             (\contents ->
                 Script.printLine <|
                     String.fromInt (String.length contents)
-                        ++ " characters in test.txt"
+                        ++ " characters in test.txt\r\n\r\n"
+                        ++ "The following lines should indicate a path access error:\r\n\r\n"
             )
 
 
