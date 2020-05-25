@@ -17,11 +17,7 @@ function createTemporaryDirectory() {
 }
 
 function extendedErrorMessage(request, error) {
-  const stackTrace = new Error().stack;
-  // Chop off first two lines which are "Error:" and this method.
-  // Also, anything from XMLHttpRequest.send and above is not useful
-  const revisedTrace = stackTrace.replace(/\s+at XMLHttpRequest.send[\s\S]*/m, "").split("\n").slice(2).join("\n");
-  return "ERROR: " + error.message + "\r\n" + revisedTrace + "\r\n  Failed request: " + JSON.stringify(request) + "\r\n" ;
+  return "ERROR: " + error.message + "\n  Failed request: " + JSON.stringify(request) + "\n" ;
 }
 
 function exit(code) {
@@ -274,7 +270,6 @@ class XMLHttpRequest {
             handleResponse({ error: "notfound" });
           } else {
             console.log(error);
-            console.trace();
             exit(1);
           }
         }
