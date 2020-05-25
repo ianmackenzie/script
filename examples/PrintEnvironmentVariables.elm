@@ -18,10 +18,11 @@ script : Script.Init -> Script String ()
 script { arguments, environment } =
     case arguments of
         [] ->
-            Script.fail (
-                "Requires at least one command-line argument specifying" ++
-                " environment variable names for which to get values."
-            )
+            Script.fail
+                ("Requires at least one command-line argument specifying"
+                    ++ " environment variable names for which to get values."
+                )
+
         _ ->
             arguments |> Script.each (printEnvironmentVariable environment)
 

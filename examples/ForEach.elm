@@ -8,6 +8,7 @@ script { arguments } =
     case arguments of
         [] ->
             Script.fail "Please provide a list numbers separated by spaces"
+
         _ ->
             arguments
                 |> Script.each

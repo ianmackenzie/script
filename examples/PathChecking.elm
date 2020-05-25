@@ -12,8 +12,8 @@ niceScript directory =
             (\contents ->
                 Script.printLine <|
                     String.fromInt (String.length contents)
-                        ++ " characters in test.txt\r\n\r\n"
-                        ++ "The following lines should indicate a path access error:\r\n\r\n"
+                        ++ " characters in test.txt\n\n"
+                        ++ "The following lines should indicate a path access error:\n\n"
             )
 
 
