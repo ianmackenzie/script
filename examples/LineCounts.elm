@@ -14,7 +14,7 @@ script : Script.Init -> Script String ()
 script { arguments, userPrivileges } =
     case arguments of
         [] ->
-            Script.fail "Requires command line arguments which are paths to files."
+            Script.fail "Please provide a list of file paths separated by spaces"
         _ ->
             List.map (File.readOnly userPrivileges) arguments
                 |> Script.collect getLineCount
