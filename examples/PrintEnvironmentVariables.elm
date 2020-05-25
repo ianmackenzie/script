@@ -19,7 +19,7 @@ script { arguments, environment } =
     case arguments of
         [] ->
             Script.fail
-                ("Requires at least one command-line argument specifying"
+                ("Please provide at least one command-line argument specifying"
                     ++ " environment variable names for which to get values."
                 )
 

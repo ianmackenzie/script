@@ -42,10 +42,10 @@ script { arguments, networkConnection } =
                             )
 
                 Nothing ->
-                    Script.fail "Requires one command-line argument which is a number"
+                    Script.fail "Please provide a number as the command-line argument"
 
         _ ->
-            Script.fail "Requires one command-line argument which is a number"
+            Script.fail "Please provide one command-line argument which is a number"
 
 
 getCurrentTime : NetworkConnection -> Script String String
