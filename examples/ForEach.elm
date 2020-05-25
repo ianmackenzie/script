@@ -7,7 +7,7 @@ script : Script.Init -> Script String ()
 script { arguments } =
     case arguments of
         [] ->
-            Script.fail "Requires command line arguments which are numbers."
+            Script.fail "Please provide a list numbers separated by spaces"
         _ ->
             arguments
                 |> Script.each
