@@ -73,7 +73,7 @@ script { arguments, userPrivileges } =
                     )
 
         _ ->
-            Script.fail "Please pass a single parent directory to check all git projects within"
+            Script.fail "Please pass a single parent directory to check all Git projects within"
 
 
 main : Script.Program
