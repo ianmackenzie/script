@@ -14,7 +14,7 @@ script { arguments, userPrivileges } =
                 |> Script.thenWith (Script.each (\line -> Script.printLine (String.toUpper line)))
 
         _ ->
-            Script.fail "Please supply the path of one file to read"
+            Script.fail "Please supply the path of one file to read and print out in uppercase"
 
 
 main : Script.Program

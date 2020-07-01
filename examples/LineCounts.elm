@@ -12,20 +12,25 @@ getLineCount file =
 
 script : Script.Init -> Script String ()
 script { arguments, userPrivileges } =
-    List.map (File.readOnly userPrivileges) arguments
-        |> Script.collect getLineCount
-        |> Script.map (List.map2 Tuple.pair arguments)
-        |> Script.thenWith
-            (Script.each
-                (\( fileName, lineCount ) ->
-                    Script.printLine
-                        (fileName
-                            ++ ": "
-                            ++ String.fromInt lineCount
-                            ++ " lines"
+    case arguments of
+        [] ->
+            Script.fail "Please provide a list of file paths separated by spaces"
+
+        _ ->
+            List.map (File.readOnly userPrivileges) arguments
+                |> Script.collect getLineCount
+                |> Script.map (List.map2 Tuple.pair arguments)
+                |> Script.thenWith
+                    (Script.each
+                        (\( fileName, lineCount ) ->
+                            Script.printLine
+                                (fileName
+                                    ++ ": "
+                                    ++ String.fromInt lineCount
+                                    ++ " lines"
+                                )
                         )
-                )
-            )
+                    )
 
 
 main : Script.Program

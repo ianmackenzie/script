@@ -9,7 +9,7 @@ script : Script.Init -> Script String ()
 script { workingDirectory } =
     let
         file =
-            File.in_ workingDirectory "reversed.txt"
+            File.in_ workingDirectory "test-written.txt"
     in
     File.delete file
 

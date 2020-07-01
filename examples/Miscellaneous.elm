@@ -8,34 +8,44 @@ import Time
 
 
 script : Script.Init -> Script String ()
-script { networkConnection } =
-    Script.succeed { text = "A", number = 2 }
-        |> Script.aside
-            (\model ->
-                Script.do
-                    [ Script.printLine model.text
-                    , printCurrentTime networkConnection
-                    , Script.sleep (Duration.seconds 0.5)
-                    ]
-            )
-        |> Script.map .number
-        |> Script.aside
-            (\number ->
-                Script.do
-                    [ Script.printLine (String.fromInt number)
-                    , printCurrentTime networkConnection
-                    , Script.sleep (Duration.seconds 0.5)
-                    , getCurrentTime networkConnection |> Script.ignoreResult
-                    ]
-            )
-        |> Script.thenWith
-            (\number ->
-                if number > 2 then
-                    Script.succeed ()
+script { arguments, networkConnection } =
+    case arguments of
+        [ digitString ] ->
+            case String.toInt digitString of
+                Just integer ->
+                    Script.succeed { text = "A", number = integer }
+                        |> Script.aside
+                            (\model ->
+                                Script.do
+                                    [ Script.printLine model.text
+                                    , printCurrentTime networkConnection
+                                    , Script.sleep (Duration.seconds 0.5)
+                                    ]
+                            )
+                        |> Script.map .number
+                        |> Script.aside
+                            (\number ->
+                                Script.do
+                                    [ Script.printLine (String.fromInt number)
+                                    , printCurrentTime networkConnection
+                                    , Script.sleep (Duration.seconds 0.5)
+                                    , getCurrentTime networkConnection |> Script.ignoreResult
+                                    ]
+                            )
+                        |> Script.thenWith
+                            (\number ->
+                                if number > 2 then
+                                    Script.printLine "Number is greater than 2"
 
-                else
-                    Script.fail "Ugh, number is too small"
-            )
+                                else
+                                    Script.fail "Number is not greater than 2"
+                            )
+
+                Nothing ->
+                    Script.fail "Please provide a number as the command-line argument"
+
+        _ ->
+            Script.fail "Please provide one command-line argument which is a number"
 
 
 getCurrentTime : NetworkConnection -> Script String String

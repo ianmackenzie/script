@@ -30,7 +30,7 @@ script { workingDirectory, platform } =
             File.in_ workingDirectory "test.txt"
 
         outputFile =
-            File.in_ workingDirectory "reversed.txt"
+            File.in_ workingDirectory "test-written.txt"
 
         lineSeparator =
             Platform.lineSeparator platform

@@ -51,7 +51,7 @@ function resolvePath(components) {
   for (var i = 1; i < components.length; i++) {
     const childPath = path.resolve(result, components[i]);
     if (path.relative(result, childPath).startsWith("..")) {
-      throw Error(components[i] + " is not a proper relative path");
+      throw Error(components[i] + " is not a permitted relative path");
     }
     result = childPath;
   }
