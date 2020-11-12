@@ -20,6 +20,10 @@ function createTemporaryDirectory() {
   return directoryPath;
 }
 
+function extendedErrorMessage(request, error) {
+  return "ERROR: " + error.message + "\n  Failed request: " + JSON.stringify(request) + "\n" ;
+}
+
 function exit(code) {
   // First, clean up any temp directories created while running the script
   for (const directoryPath of tempDirectoriesToRemove) {
@@ -70,7 +74,7 @@ function listEntities(request, handleResponse, statsPredicate) {
       });
     handleResponse(results);
   } catch (error) {
-    handleResponse({ message: error.message });
+    handleResponse({ message: extendedErrorMessage(request, error) });
   }
 }
 
@@ -225,7 +229,7 @@ class XMLHttpRequest {
           const contents = new TextDecoder("utf-8").decode(data);
           handleResponse(contents);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "writeFile":
@@ -235,7 +239,7 @@ class XMLHttpRequest {
           Deno.writeFileSync(filePath, contents);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "listFiles":
@@ -290,7 +294,7 @@ class XMLHttpRequest {
           Deno.copyFileSync(sourcePath, destinationPath);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "moveFile":
@@ -300,7 +304,7 @@ class XMLHttpRequest {
           Deno.renameSync(sourcePath, destinationPath);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "deleteFile":
@@ -309,7 +313,7 @@ class XMLHttpRequest {
           Deno.removeSync(filePath);
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "stat":
@@ -327,7 +331,7 @@ class XMLHttpRequest {
           if (error instanceof Deno.errors.NotFound) {
             handleResponse("nonexistent");
           } else {
-            handleResponse({ message: error.message });
+            handleResponse({ message: extendedErrorMessage(request, error) });
           }
         }
         break;
@@ -337,7 +341,7 @@ class XMLHttpRequest {
           Deno.mkdirSync(directoryPath, { recursive: request.value.recursive });
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "removeDirectory":
@@ -348,7 +352,7 @@ class XMLHttpRequest {
           });
           handleResponse(null);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "createTemporaryDirectory":
@@ -356,7 +360,7 @@ class XMLHttpRequest {
           const directoryPath = createTemporaryDirectory();
           handleResponse(directoryPath);
         } catch (error) {
-          handleResponse({ message: error.message });
+          handleResponse({ message: extendedErrorMessage(request, error) });
         }
         break;
       case "http":
